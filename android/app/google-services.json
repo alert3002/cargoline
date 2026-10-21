@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1051655433329",
+    "project_id": "cargoline-28aa2",
+    "storage_bucket": "cargoline-28aa2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051655433329:android:e87ca1b429965a284c7fd0",
+        "android_client_info": {
+          "package_name": "com.cargoline.tj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpvyrZiblbv7AmOAUQJorjfZIBiscqXeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

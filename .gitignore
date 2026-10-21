@@ -1,0 +1,26 @@
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.iml
+
+# Server, helper scripts, and secrets — not for the phone build
+backend/
+tools/
+firebase-service-account.json
+.env
+*.env
+key.properties
+**/*.jks
+**/*.keystore
+
+# Local / IDE
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+build_apk_log.txt

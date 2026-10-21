@@ -1,0 +1,44 @@
+name: cargo_line_tj
+description: Cargo Line TJ — карго-доставка из Китая в Таджикистан.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+  provider: ^6.1.2
+  url_launcher: ^6.3.1
+  shared_preferences: ^2.3.3
+  http: ^1.2.2
+  google_sign_in: ^6.2.2
+  firebase_core: ^3.15.2
+  firebase_messaging: ^15.2.10
+  flutter_local_notifications: ^19.4.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/icons_3d/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo_cargoline.png"
+  adaptive_icon_background: "#FFF9F9"
+  adaptive_icon_foreground: "assets/images/logo_cargoline.png"
