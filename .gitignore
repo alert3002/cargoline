@@ -17,6 +17,7 @@ firebase-service-account.json
 key.properties
 **/*.jks
 **/*.keystore
+**/*.p8
 
 # Local / IDE
 .idea/
