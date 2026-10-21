@@ -1,4 +1,5 @@
 import 'package:cargo_line_tj/core/brand_constants.dart';
+import 'package:cargo_line_tj/services/auth_service.dart';
 import 'package:cargo_line_tj/l10n/app_strings.dart';
 import 'package:cargo_line_tj/models/user_profile.dart';
 import 'package:cargo_line_tj/parcel_app_theme.dart';
@@ -140,6 +141,15 @@ class SettingsScreen extends StatelessWidget {
                     style: const TextStyle(color: CargoColors.red),
                   ),
                 ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: () => _deleteAccount(context),
+                  icon: const Icon(Icons.delete_forever_rounded, color: CargoColors.red),
+                  label: Text(
+                    s.isRu ? 'Удалить аккаунт' : 'Нест кардани ҳисоб',
+                    style: const TextStyle(color: CargoColors.red),
+                  ),
+                ),
               ],
             ),
           ),
@@ -180,6 +190,44 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
       ),
+    );
+  }
+}
+
+Future<void> _deleteAccount(BuildContext context) async {
+  final app = context.read<AppProvider>();
+  final ru = app.strings.isRu;
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text(ru ? 'Удалить аккаунт?' : 'Ҳисоб нест шавад?'),
+      content: Text(
+        ru
+            ? 'Телефон, профиль, треки и сообщения будут удалены. Это нельзя отменить.'
+            : 'Телефон, профил, трекҳо ва паёмҳо нест мешаванд. Бозгашт нест.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(ctx, false),
+          child: Text(ru ? 'Отмена' : 'Бекор'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(ctx, true),
+          child: Text(ru ? 'Удалить' : 'Нест кардан'),
+        ),
+      ],
+    ),
+  );
+  if (ok != true || !context.mounted) return;
+  try {
+    await context.read<AppProvider>().deleteAccount();
+    if (context.mounted && Navigator.of(context).canPop()) {
+      Navigator.pop(context);
+    }
+  } on AuthException catch (e) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(e.message), behavior: SnackBarBehavior.floating),
     );
   }
 }

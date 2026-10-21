@@ -75,6 +75,16 @@ class AuthService {
     return _decode(response);
   }
 
+  Future<void> deleteAccount(String token) async {
+    final response = await _client
+        .delete(
+          _uri('/api/v1/auth/account'),
+          headers: _authHeaders(token),
+        )
+        .timeout(requestTimeout);
+    _decode(response);
+  }
+
   Future<Map<String, dynamic>> fetchMe(String token) async {
     final response = await _client
         .get(

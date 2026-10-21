@@ -337,6 +337,15 @@ class AppProvider extends ChangeNotifier {
     await _store.setLoggedInFlag(true);
   }
 
+  Future<void> deleteAccount() async {
+    final token = _accessToken;
+    if (token == null || token.isEmpty) {
+      throw AuthException('Войдите снова');
+    }
+    await _auth.deleteAccount(token);
+    await logout();
+  }
+
   Future<void> logout() async {
     _isAuthenticated = false;
     _user = null;
