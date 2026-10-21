@@ -70,7 +70,17 @@ class PushService {
         sound: true,
       );
     } catch (_) {}
+    if (Platform.isIOS) {
+      try {
+        await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+      } catch (_) {}
+    }
     FirebaseMessaging.onMessage.listen((message) async {
+      if (Platform.isIOS) return;
       final note = message.notification;
       final title = note?.title ?? message.data['title'];
       final body = note?.body ?? message.data['body'];
@@ -105,8 +115,18 @@ class PushService {
   static Future<void> _upload() async {
     final access = _access;
     if (!_ready || access == null || access.isEmpty) return;
+    if (Platform.isIOS) {
+      for (var i = 0; i < 12; i++) {
+        String? apns;
+        try {
+          apns = await FirebaseMessaging.instance.getAPNSToken();
+        } catch (_) {}
+        if (apns != null && apns.isNotEmpty) break;
+        await Future<void>.delayed(const Duration(seconds: 1));
+      }
+    }
     String? token;
-    for (var i = 0; i < 3 && (token == null || token.isEmpty); i++) {
+    for (var i = 0; i < 5 && (token == null || token.isEmpty); i++) {
       try {
         token = await FirebaseMessaging.instance.getToken();
       } catch (_) {}
@@ -123,7 +143,10 @@ class PushService {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $access',
             },
-            body: jsonEncode({'token': token}),
+            body: jsonEncode({
+              'token': token,
+              'platform': Platform.isIOS ? 'ios' : 'android',
+            }),
           )
           .timeout(const Duration(seconds: 8));
     } catch (_) {}
