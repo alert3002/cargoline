@@ -1,4 +1,5 @@
 import 'package:cargo_line_tj/providers/app_provider.dart';
+import 'package:cargo_line_tj/services/auth_service.dart';
 import 'package:cargo_line_tj/ui/screens/auth/sms_verify_screen.dart';
 import 'package:cargo_line_tj/ui/widgets/cargo_logo.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +37,28 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       return;
     }
 
+    final demo = local == '921234567';
     setState(() => _busy = true);
     try {
       final phone = '+992 $local';
+      await context.read<AppProvider>().sendSmsCode(phone);
       if (!mounted) return;
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => SmsVerifyScreen(phone: phone, demoMode: true),
+          builder: (_) => SmsVerifyScreen(phone: phone, demoMode: demo),
+        ),
+      );
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message), behavior: SnackBarBehavior.floating),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Не удалось отправить SMS'),
+          behavior: SnackBarBehavior.floating,
         ),
       );
     } finally {
@@ -90,6 +106,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                   counterText: '',
                   hintText: 'XXXXXXXXX',
                 ),
+                onChanged: (_) => setState(() {}),
                 onSubmitted: (_) => _continue(),
               ),
               const SizedBox(height: 28),
@@ -109,14 +126,16 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       : Text(s.isRu ? 'Продолжить' : 'Давом додан'),
                 ),
               ),
-              const SizedBox(height: 16),
-              Text(
-                s.isRu
-                    ? 'Демо-вход: код 1234 (без SMS)'
-                    : 'Демо: рамз 1234 (бе SMS)',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
-              ),
+              if (_phoneController.text == '921234567') ...[
+                const SizedBox(height: 16),
+                Text(
+                  s.isRu
+                      ? 'Демо-вход: код 1234'
+                      : 'Демо: рамз 1234',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium,
+                ),
+              ],
             ],
           ),
         ),

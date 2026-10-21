@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cargo_line_tj/parcel_app_theme.dart';
 import 'package:cargo_line_tj/providers/app_provider.dart';
+import 'package:cargo_line_tj/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -103,15 +104,15 @@ class _SmsVerifyScreenState extends State<SmsVerifyScreen> {
       _error = null;
     });
     try {
-      if (!widget.demoMode) {
-        await context.read<AppProvider>().sendSmsCode(widget.phone);
-      }
+      await context.read<AppProvider>().sendSmsCode(widget.phone);
       if (!mounted) return;
       for (final c in _controllers) {
         c.clear();
       }
       _focusNodes.first.requestFocus();
       _startTimer();
+    } on AuthException catch (e) {
+      if (mounted) setState(() => _error = e.message);
     } catch (_) {
       if (mounted) {
         setState(() => _error = 'Не удалось отправить SMS');

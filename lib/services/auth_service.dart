@@ -23,7 +23,8 @@ class AuthService {
   final String baseUrl;
 
   static String get defaultBaseUrl => BrandConstants.apiBaseUrl;
-  static const Duration requestTimeout = Duration(seconds: 4);
+  static const Duration requestTimeout = Duration(seconds: 8);
+  static const Duration smsTimeout = Duration(seconds: 25);
 
   Uri _uri(String path) => Uri.parse('$baseUrl$path');
 
@@ -39,7 +40,7 @@ class AuthService {
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'phone': _formatPhone(phone)}),
         )
-        .timeout(requestTimeout);
+        .timeout(smsTimeout);
     return _decode(response);
   }
 
@@ -53,7 +54,7 @@ class AuthService {
             'code': code.trim(),
           }),
         )
-        .timeout(requestTimeout);
+        .timeout(smsTimeout);
     return _decode(response);
   }
 

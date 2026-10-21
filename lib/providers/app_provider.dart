@@ -178,42 +178,9 @@ class AppProvider extends ChangeNotifier {
 
   Future<bool> verifySms(String code, String phone) async {
     final digits = phone.replaceAll(RegExp(r'\D'), '');
-    if (digits.length < 12) return false;
-
-    final trimmed = code.trim();
-    // Демо: без SMS, но с реальным токеном на бэкенде (ensure-session),
-    // чтобы треки/чат/маркет/новости синхронизировались с админкой.
-    if (trimmed == '1234' || trimmed == '123456') {
-      final phoneNorm =
-          digits.startsWith('992') ? digits : '992$digits';
-      try {
-        final result = await _auth.ensureSession(phone: phoneNorm);
-        final token = result['access_token'] as String?;
-        final userMap = result['user'];
-        final profile = userMap is Map<String, dynamic>
-            ? UserProfile.fromJson(userMap)
-            : UserProfile(
-                clientCode: result['client_code'] as String? ??
-                    'TJ9515${digits.substring(digits.length - 4)}',
-                phone: phoneNorm,
-                firstName: 'Клиент',
-                profileComplete:
-                    result['profile_complete'] as bool? ?? false,
-              );
-        await _login(profile, AuthMethod.sms, accessToken: token);
-        return true;
-      } catch (_) {
-        final profile = UserProfile(
-          clientCode: 'TJ9515${digits.substring(digits.length - 4)}',
-          phone: phoneNorm,
-          firstName: 'Клиент',
-          profileComplete: false,
-          regNumber: 1,
-        );
-        await _login(profile, AuthMethod.sms);
-        return true;
-      }
-    }
+    if (digits.length < 9) return false;
+    final phoneNorm = digits.startsWith('992') ? digits : '992$digits';
+    if (phoneNorm.length != 12) return false;
 
     try {
       final result = await _auth.verifyCode(phone, code);
@@ -227,7 +194,7 @@ class AppProvider extends ChangeNotifier {
             'TJ${DateTime.now().year}${digits.substring(digits.length - 4)}';
         profile = UserProfile(
           clientCode: clientCode,
-          phone: digits.startsWith('992') ? digits : '992$digits',
+          phone: phoneNorm,
           profileComplete: result['profile_complete'] as bool? ?? false,
         );
       }
