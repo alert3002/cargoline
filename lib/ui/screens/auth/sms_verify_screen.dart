@@ -24,9 +24,7 @@ class SmsVerifyScreen extends StatefulWidget {
 }
 
 class _SmsVerifyScreenState extends State<SmsVerifyScreen> {
-  static const _demoLen = 4;
-
-  late final int _len;
+  static const _len = 4;
   late final List<TextEditingController> _controllers;
   late final List<FocusNode> _focusNodes;
   String? _error;
@@ -38,7 +36,6 @@ class _SmsVerifyScreenState extends State<SmsVerifyScreen> {
   @override
   void initState() {
     super.initState();
-    _len = widget.demoMode ? _demoLen : 6;
     _controllers = List.generate(_len, (_) => TextEditingController());
     _focusNodes = List.generate(_len, (_) => FocusNode());
     _startTimer();
@@ -75,7 +72,8 @@ class _SmsVerifyScreenState extends State<SmsVerifyScreen> {
     final code =
         _controllers.map((c) => c.text).join().replaceAll(RegExp(r'\D'), '');
     if (code.length != _len) {
-      setState(() => _error = widget.demoMode ? 'Введите 4 цифры' : 'Введите 6 цифр');
+      final ru = context.read<AppProvider>().strings.isRu;
+      setState(() => _error = ru ? 'Введите 4 цифры' : '4 рақамро ворид кунед');
       return;
     }
     final app = context.read<AppProvider>();
@@ -182,7 +180,7 @@ class _SmsVerifyScreenState extends State<SmsVerifyScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(_len, (i) {
                   return SizedBox(
-                    width: widget.demoMode ? 58 : 48,
+                    width: 58,
                     height: 58,
                     child: TextField(
                       controller: _controllers[i],
