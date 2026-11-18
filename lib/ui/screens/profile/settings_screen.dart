@@ -187,6 +187,15 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 20),
+          Center(
+            child: Text(
+              s.isRu ? 'Версия 1.1.0 (10)' : 'Версия 1.1.0 (10)',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+              ),
+            ),
+          ),
         ],
       ),
       ),
