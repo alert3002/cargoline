@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cargo_line_tj/providers/app_provider.dart';
 import 'package:cargo_line_tj/providers/parcel_provider.dart';
 import 'package:cargo_line_tj/ui/screens/home_screen.dart';
-import 'package:cargo_line_tj/ui/screens/market_screen.dart';
 import 'package:cargo_line_tj/ui/screens/orders_screen.dart';
 import 'package:cargo_line_tj/ui/screens/profile_screen.dart';
 import 'package:cargo_line_tj/ui/widgets/cargo_bottom_bar.dart';
@@ -81,7 +80,7 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
   }
 
   Widget _page(int i) {
-    // Lazy build — don't keep all 4 heavy trees hot at once until visited.
+    // Lazy build — don't keep all tabs hot until visited.
     if (!_visited.contains(i) && i != _barIndex) {
       return const SizedBox.shrink();
     }
@@ -90,8 +89,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
         return const HomeScreen();
       case 1:
         return const OrdersScreen();
-      case 2:
-        return const MarketScreen();
       default:
         return const ProfileScreen();
     }
@@ -109,7 +106,6 @@ class _MainShellState extends State<MainShell> with WidgetsBindingObserver {
           _page(0),
           _page(1),
           _page(2),
-          _page(3),
         ],
       ),
       bottomNavigationBar: CargoBottomBar(

@@ -320,16 +320,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Маркетплейсы Китая',
+                    s.isRu ? 'Внешние магазины' : 'Мағозаҳои беруна',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 6),
                   Text(
-                    '中国市场',
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
+                    s.isRu
+                        ? 'CargoLine.TJ — независимая логистическая компания. Мы не партнёры и не аффилированы с Pinduoduo, Taobao, 1688 и Poizon. Кнопки ниже — только внешние ссылки; оплата в приложении только за нашу доставку.'
+                        : 'CargoLine.TJ — ширкати мустақили логистика аст. Мо ҳамкор ва шарики Pinduoduo, Taobao, 1688 ва Poizon нестем. Тугмаҳои поён танҳо истинодҳои берунаанд; пардохт дар барнома фақат барои расонидани мост.',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      height: 1.35,
                       color: theme.hintColor,
                     ),
                   ),
@@ -354,22 +356,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     _Market(
                       label: 'Pinduoduo',
-                      asset: CargoIconAssets.marketPinduoduo,
+                      icon: Icons.open_in_new_rounded,
                       onTap: () => _openMarket('pinduoduo'),
                     ),
                     _Market(
                       label: '1688',
-                      asset: CargoIconAssets.market1688,
+                      icon: Icons.link_rounded,
                       onTap: () => _openMarket('1688'),
                     ),
                     _Market(
                       label: 'Taobao',
-                      asset: CargoIconAssets.marketTaobao,
+                      icon: Icons.public_rounded,
                       onTap: () => _openMarket('taobao'),
                     ),
                     _Market(
                       label: 'Poizon',
-                      asset: CargoIconAssets.marketPoizon,
+                      icon: Icons.shopping_bag_outlined,
                       onTap: () => _openMarket('poizon'),
                     ),
                   ],
@@ -643,16 +645,17 @@ class _QuickAction extends StatelessWidget {
 class _Market extends StatelessWidget {
   const _Market({
     required this.label,
-    required this.asset,
+    required this.icon,
     required this.onTap,
   });
 
   final String label;
-  final String asset;
+  final IconData icon;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Expanded(
       child: InkWell(
         onTap: onTap,
@@ -661,21 +664,27 @@ class _Market extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 2),
           child: Column(
             children: [
-              CargoIcon(
-                asset: asset,
-                icon: Icons.storefront_rounded,
-                size: 58,
-                padded: false,
-                showShadow: false,
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: CargoColors.red.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: CargoColors.red.withValues(alpha: 0.22),
+                  ),
+                ),
+                child: Icon(icon, size: 24, color: CargoColors.red),
               ),
               const SizedBox(height: 6),
               Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
             ],

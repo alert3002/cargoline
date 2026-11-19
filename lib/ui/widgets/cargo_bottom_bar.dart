@@ -17,20 +17,18 @@ class CargoBottomBar extends StatelessWidget {
   static const _icons = [
     Icons.home_outlined,
     Icons.local_shipping_outlined,
-    Icons.storefront_outlined,
     Icons.person_outline_rounded,
   ];
   static const _iconsSel = [
     Icons.home_rounded,
     Icons.local_shipping_rounded,
-    Icons.storefront_rounded,
     Icons.person_rounded,
   ];
 
   @override
   Widget build(BuildContext context) {
     final s = context.watch<AppProvider>().strings;
-    final labels = [s.navHome, s.navOrders, 'Маркет', s.navProfile];
+    final labels = [s.navHome, s.navOrders, s.navProfile];
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final barBg = isDark
         ? Colors.black.withValues(alpha: 0.72)
@@ -59,7 +57,7 @@ class CargoBottomBar extends StatelessWidget {
             height: 62,
             child: LayoutBuilder(
               builder: (context, c) {
-                final w = c.maxWidth / 4;
+                final w = c.maxWidth / 3;
                 return Stack(
                   children: [
                     AnimatedPositioned(
@@ -81,7 +79,7 @@ class CargoBottomBar extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        for (var i = 0; i < 4; i++)
+                        for (var i = 0; i < 3; i++)
                           Expanded(
                             child: InkWell(
                               onTap: () {

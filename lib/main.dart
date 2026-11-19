@@ -1,6 +1,5 @@
 import 'package:cargo_line_tj/app.dart';
 import 'package:cargo_line_tj/providers/app_provider.dart';
-import 'package:cargo_line_tj/providers/cart_provider.dart';
 import 'package:cargo_line_tj/providers/parcel_provider.dart';
 import 'package:cargo_line_tj/services/local_store.dart';
 import 'package:cargo_line_tj/services/push_service.dart';
@@ -43,7 +42,6 @@ class _BootApp extends StatefulWidget {
 class _BootAppState extends State<_BootApp> {
   AppProvider? _app;
   ParcelProvider? _parcels;
-  CartProvider? _cart;
   bool _splashDone = false;
 
   @override
@@ -57,7 +55,6 @@ class _BootAppState extends State<_BootApp> {
     final store = await LocalStore.open();
     final app = AppProvider(store);
     final parcels = ParcelProvider(store);
-    final cart = CartProvider();
 
     void syncSession() {
       parcels.setSession(
@@ -80,7 +77,6 @@ class _BootAppState extends State<_BootApp> {
     setState(() {
       _app = app;
       _parcels = parcels;
-      _cart = cart;
     });
   }
 
@@ -94,8 +90,7 @@ class _BootAppState extends State<_BootApp> {
 
   @override
   Widget build(BuildContext context) {
-    final providersReady =
-        _app != null && _parcels != null && _cart != null;
+    final providersReady = _app != null && _parcels != null;
 
     if (!_splashDone) {
       return MaterialApp(
@@ -133,7 +128,6 @@ class _BootAppState extends State<_BootApp> {
       providers: [
         ChangeNotifierProvider.value(value: _app!),
         ChangeNotifierProvider.value(value: _parcels!),
-        ChangeNotifierProvider.value(value: _cart!),
       ],
       child: const CargoApp(splashAlreadyDone: true),
     );
